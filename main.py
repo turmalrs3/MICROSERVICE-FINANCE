@@ -91,7 +91,7 @@ async def get_finance_details(appointment_id: int):
         treatments = result.fetchall()
 
         if finance_details:
-            finance_dict = dict(finance_details)
+            finance_dict = dict(zip(result.keys(), finance_details))
             return {"status": "success", "data": finance_dict, "treatments": treatments}
         
         else:
