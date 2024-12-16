@@ -52,6 +52,7 @@ async def get_finance_details(appointment_id: int):
     db_session = SessionLocal()
 
     try:
+        # Query para obter os detalhes financeiros
         query = """
         SELECT 
             a.AppointmentID,
@@ -87,29 +88,30 @@ async def get_finance_details(appointment_id: int):
         result = db_session.execute(text(query), {"appointment_id": appointment_id})
         finance_details = result.fetchone()
 
-        # add Verify
+        # Verify
         if not finance_details:
             return {"status": "error", "message": "Appointment not found."}
-            
-        #colunas da query
-        columns = result.keys()  # Captura as colunas da tabela
-        #finance_dict = dict(zip(columns, finance_details))  # Mapeia colunas e valores
 
-        result = db_session.execute(text(f"SELECT * FROM AppointmentTreatment WHERE AppointmentID = {appointment_id}"))
-        treatments = result.fetchall()
+        # nomes das colunas da query
+        columns = result.keys()
 
-        #if finance_details:
-            #finance_dict = finance_details#dict(finance_details)
-    
-        return {"status": "success", "data": finance_details, "treatments": treatments}
+        # Converta o resultado para um dicionário
+        finance_dict = dict(zip(columns, finance_details))
+
+        # Query para obter os tratamentos relacionados
+        treatment_query = "SELECT * FROM AppointmentTreatment WHERE AppointmentID = :appointment_id"
+        treatments_result = db_session.execute(text(treatment_query), {"appointment_id": appointment_id})
+        treatments = [dict(row._mapping) for row in treatments_result.fetchall()]  # Converte o resultado em dicionários
+
         
-        #aaa
-        #else:
-            #return {"status": "error", "message": "Appointment not found."}
+        return {"status": "success", "data": finance_dict, "treatments": treatments}
 
     except Exception as e:
+        # Retorne o erro detalhado
         return {"status": "error", "message": f"Error retrieving finance details: {str(e)}"}
 
+    finally:
+        db_session.close()
 
 # CREATE FinanceDetail
 @app.post("/finance_detail", tags=["Finance"])
