@@ -93,7 +93,7 @@ async def get_finance_details(appointment_id: int):
             
         #colunas da query
         columns = result.keys()  # Captura as colunas da tabela
-        finance_dict = dict(zip(columns, finance_details))  # Mapeia colunas e valores
+        #finance_dict = dict(zip(columns, finance_details))  # Mapeia colunas e valores
 
         result = db_session.execute(text(f"SELECT * FROM AppointmentTreatment WHERE AppointmentID = {appointment_id}"))
         treatments = result.fetchall()
@@ -101,7 +101,7 @@ async def get_finance_details(appointment_id: int):
         #if finance_details:
             #finance_dict = finance_details#dict(finance_details)
     
-        return {"status": "success", "data": finance_dict, "treatments": treatments}
+        return {"status": "success", "data": finance_details, "treatments": treatments}
         
         
         #else:
