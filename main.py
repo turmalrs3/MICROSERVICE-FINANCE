@@ -103,7 +103,7 @@ async def get_finance_details(appointment_id: int):
     
         return {"status": "success", "data": finance_details, "treatments": treatments}
         
-        
+        #aaa
         #else:
             #return {"status": "error", "message": "Appointment not found."}
 
