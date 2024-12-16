@@ -87,12 +87,21 @@ async def get_finance_details(appointment_id: int):
         result = db_session.execute(text(query), {"appointment_id": appointment_id})
         finance_details = result.fetchone()
 
+        # add Verify
+        if not finance_details:
+            return {"status": "error", "message": "Appointment not found."}
+            
+        #colunas da query
+        columns = result.keys()  # Captura as colunas da tabela
+        finance_dict = dict(zip(columns, finance_details))  # Mapeia colunas e valores
+
         result = db_session.execute(text(f"SELECT * FROM AppointmentTreatment WHERE AppointmentID = {appointment_id}"))
         treatments = result.fetchall()
 
-        if finance_details:
-            finance_dict = finance_details#dict(finance_details)
-            return {"status": "success", "data": finance_dict, "treatments": treatments}
+        #if finance_details:
+            #finance_dict = finance_details#dict(finance_details)
+        return {"status": "success", "data": finance_dict, "treatments": treatments}
+        
         
         else:
             return {"status": "error", "message": "Appointment not found."}
