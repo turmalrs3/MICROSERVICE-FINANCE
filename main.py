@@ -100,11 +100,11 @@ async def get_finance_details(appointment_id: int):
 
         #if finance_details:
             #finance_dict = finance_details#dict(finance_details)
-        return {"status": "success", "data": finance_dict, "treatments": treatments}
+        #return {"status": "success", "data": finance_dict, "treatments": treatments}
         
         
-        else:
-            return {"status": "error", "message": "Appointment not found."}
+        #else:
+            #return {"status": "error", "message": "Appointment not found."}
 
     except Exception as e:
         return {"status": "error", "message": f"Error retrieving finance details: {str(e)}"}
